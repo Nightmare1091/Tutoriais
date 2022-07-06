@@ -1,0 +1,31 @@
+local Data = {}
+
+local DSS = game:GetService("DataStoreService")
+local DS1 = DSS:GetDataStore("Data")
+
+function Data:Save(Player)
+	local data = {}
+	
+	data.Money = Player.leaderstats.Money.Value
+	data.Kills = Player.leaderstats.Kills.Value
+	
+	DS1:SetAsync(Player.UserId, data)
+end
+
+function Data:Load(Player)
+	local data = DS1:GetAsync(Player.UserId)
+	
+	if data then
+		warn("Data encontrada!")
+		
+		Player.leaderstats.Money.Value = data.Money
+		Player.leaderstats.Kills.Value = data.Kills
+	else
+		warn("Sem data encontrada!")
+		
+		Player.leaderstats.Money.Value = 100
+		Player.leaderstats.Kills.Value = 0
+	end
+end
+
+return Data
